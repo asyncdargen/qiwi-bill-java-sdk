@@ -18,6 +18,7 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9"
 }
 
+jar.duplicatesStrategy DuplicatesStrategy.EXCLUDE
 jar.from configurations.runtimeClasspath.collect(project.&zipTree)
 
 tasks.withType(JavaCompile)*.options*.encoding = "UTF-8"
