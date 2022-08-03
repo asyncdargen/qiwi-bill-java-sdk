@@ -15,7 +15,7 @@
 Установка с помощью [gradle](https://gradle.org):
 
 ```groovy
-implementation 'com.github.asyncdargen:BoardAPI:master-SNAPSHOT'
+implementation 'com.github.asyncdargen:qiwi-bill-java-sdk:master-SNAPSHOT'
 ```
 
 
