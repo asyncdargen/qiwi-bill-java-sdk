@@ -1,25 +1,15 @@
 package com.qiwi.billpayments.sdk.model;
 
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter
+@ToString
 public enum BillStatus {
-    WAITING("WAITING"),
-    PAID("PAID"),
-    REJECTED("REJECTED"),
-    EXPIRED("EXPIRED");
 
-    private final String value;
+    WAITING,
+    PAID,
+    REJECTED,
+    EXPIRED;
 
-    BillStatus(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public String toString() {
-        return "BillStatus{" +
-                "value='" + value + '\'' +
-                '}';
-    }
 }

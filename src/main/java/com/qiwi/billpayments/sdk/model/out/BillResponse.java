@@ -5,10 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.qiwi.billpayments.sdk.model.MoneyAmount;
 import com.qiwi.billpayments.sdk.model.in.CustomFields;
 import com.qiwi.billpayments.sdk.model.in.Customer;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.time.ZonedDateTime;
 
+@Getter
+@ToString
+@EqualsAndHashCode
 public class BillResponse {
+
     private final String siteId;
     private final String billId;
     private final MoneyAmount amount;
@@ -19,6 +26,7 @@ public class BillResponse {
     private final ZonedDateTime expirationDateTime;
     private final String payUrl;
     private final CustomFields customFields;
+    private final String recipientPhoneNumber;
 
     @JsonCreator
     public BillResponse(
@@ -31,8 +39,8 @@ public class BillResponse {
             @JsonProperty("creationDateTime") ZonedDateTime creationDateTime,
             @JsonProperty("expirationDateTime") ZonedDateTime expirationDateTime,
             @JsonProperty("payUrl") String payUrl,
-            @JsonProperty("customFields") CustomFields customFields
-    ) {
+            @JsonProperty("customFields") CustomFields customFields,
+            @JsonProperty("recipientPhoneNumber") String recipientPhoneNumber) {
         this.siteId = siteId;
         this.billId = billId;
         this.amount = amount;
@@ -43,76 +51,7 @@ public class BillResponse {
         this.expirationDateTime = expirationDateTime;
         this.payUrl = payUrl;
         this.customFields = customFields;
+        this.recipientPhoneNumber = recipientPhoneNumber;
     }
 
-    public BillResponse withNewPayUrl(String payUrl) {
-        return new BillResponse(
-                this.siteId,
-                this.billId,
-                this.amount,
-                this.status,
-                this.comment,
-                this.customer,
-                this.creationDateTime,
-                this.expirationDateTime,
-                payUrl,
-                this.customFields
-        );
-    }
-
-    public String getSiteId() {
-        return siteId;
-    }
-
-    public String getBillId() {
-        return billId;
-    }
-
-    public MoneyAmount getAmount() {
-        return amount;
-    }
-
-    public ResponseStatus getStatus() {
-        return status;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public ZonedDateTime getCreationDateTime() {
-        return creationDateTime;
-    }
-
-    public ZonedDateTime getExpirationDateTime() {
-        return expirationDateTime;
-    }
-
-    public String getPayUrl() {
-        return payUrl;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public CustomFields getCustomFields() {
-        return customFields;
-    }
-
-    @Override
-    public String toString() {
-        return "BillResponse{" +
-                "siteId='" + siteId + '\'' +
-                ", billId='" + billId + '\'' +
-                ", amount=" + amount +
-                ", status=" + status +
-                ", comment='" + comment + '\'' +
-                ", customer=" + customer +
-                ", creationDateTime=" + creationDateTime +
-                ", expirationDateTime=" + expirationDateTime +
-                ", payUrl='" + payUrl + '\'' +
-                ", customFields=" + customFields +
-                '}';
-    }
 }

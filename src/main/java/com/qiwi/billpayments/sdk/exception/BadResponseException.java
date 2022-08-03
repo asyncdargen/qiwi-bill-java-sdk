@@ -1,8 +1,11 @@
 package com.qiwi.billpayments.sdk.exception;
 
 import com.qiwi.billpayments.sdk.model.ResponseData;
+import lombok.Getter;
 
+@Getter
 public class BadResponseException extends RuntimeException {
+
     private final int httpStatus;
 
     public BadResponseException(ResponseData responseData) {
@@ -15,7 +18,4 @@ public class BadResponseException extends RuntimeException {
         this.httpStatus = httpStatus;
     }
 
-    public int getHttpStatus() {
-        return httpStatus;
-    }
 }

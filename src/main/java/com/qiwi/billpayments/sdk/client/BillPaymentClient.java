@@ -1,16 +1,12 @@
 package com.qiwi.billpayments.sdk.client;
 
-import com.qiwi.billpayments.sdk.PomInfo;
 import com.qiwi.billpayments.sdk.exception.UrlEncodingException;
 import com.qiwi.billpayments.sdk.model.MoneyAmount;
-import com.qiwi.billpayments.sdk.model.in.CreateBillInfo;
-import com.qiwi.billpayments.sdk.model.in.CreateBillRequest;
-import com.qiwi.billpayments.sdk.model.in.CustomFields;
-import com.qiwi.billpayments.sdk.model.in.PaymentInfo;
-import com.qiwi.billpayments.sdk.model.in.RefundBillRequest;
+import com.qiwi.billpayments.sdk.model.in.*;
 import com.qiwi.billpayments.sdk.model.out.BillResponse;
 import com.qiwi.billpayments.sdk.model.out.RefundResponse;
 import com.qiwi.billpayments.sdk.web.WebClient;
+import lombok.Getter;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
@@ -20,13 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Getter
 public class BillPaymentClient {
+
     private static final String AUTHORIZATION_PREFIX = "Bearer ";
-    private static final String CLIENT_NAME = "java_sdk";
+    private static final String CLIENT_NAME = "java-sdk";
     private static final String BILLS_URL = "https://api.qiwi.com/partner/bill/v1/bills/";
     private static final String PAYMENT_URL = "https://oplata.qiwi.com/create";
 
-    private final String appVersion = PomInfo.VERSION;
+    private final String appVersion = "1.5.1";
     private final RequestMappingIntercessor requestMappingIntercessor;
     private final Map<String, String> headers;
 
@@ -47,26 +45,11 @@ public class BillPaymentClient {
         BillResponse response = requestMappingIntercessor.request(
                 "PUT",
                 BILLS_URL + info.getBillId(),
-                Optional.of(appendCustomFields(info)),
+                Optional.of(CreateBillRequest.create(info, new CustomFields(CLIENT_NAME, appVersion))),
                 BillResponse.class,
                 headers
         );
-        return appendSuccessUrl(response, info.getSuccessUrl());
-    }
-
-    static BillResponse appendSuccessUrl(BillResponse response, String successUrl) throws URISyntaxException {
-        String updatedUrl = new URIBuilder(response.getPayUrl())
-                .addParameter("successUrl", successUrl)
-                .build()
-                .toString();
-        return response.withNewPayUrl(updatedUrl);
-    }
-
-    private CreateBillRequest appendCustomFields(CreateBillInfo info) {
-        return CreateBillRequest.create(
-                info,
-                new CustomFields(CLIENT_NAME, appVersion, null)
-        );
+        return response;
     }
 
     public BillResponse getBillInfo(String billId) {
@@ -126,7 +109,4 @@ public class BillPaymentClient {
         }
     }
 
-    public String getAppVersion() {
-        return appVersion;
-    }
 }
